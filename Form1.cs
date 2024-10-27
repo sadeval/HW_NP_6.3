@@ -27,7 +27,6 @@ namespace FutureMeApp
                 return;
             }
 
-            // Сохраняем письмо в базу данных с датой отправки
             SaveMessage(email, message, deliveryDate);
 
             MessageBox.Show("Your letter has been scheduled for delivery.");
@@ -35,7 +34,6 @@ namespace FutureMeApp
 
         private DateTime GetSelectedDate()
         {
-            // Выбор даты доставки в зависимости от выбора пользователя
             switch (cmbDeliveryTime.SelectedIndex)
             {
                 case 0: return DateTime.Now.AddMonths(6);
@@ -47,13 +45,10 @@ namespace FutureMeApp
             }
         }
 
-        // Метод для сохранения письма в файл
         private void SaveMessage(string email, string message, DateTime deliveryDate)
         {
-            // Указываем путь для файла (например, в папке приложения)
             string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "scheduledMessages.json");
 
-            // Создаем объект сообщения
             FutureMessage futureMessage = new FutureMessage
             {
                 Email = email,
@@ -61,7 +56,6 @@ namespace FutureMeApp
                 DeliveryDate = deliveryDate
             };
 
-            // Читаем уже существующие письма из файла, если они есть
             List<FutureMessage> messages = new List<FutureMessage>();
             if (File.Exists(filePath))
             {
@@ -69,24 +63,20 @@ namespace FutureMeApp
                 messages = JsonConvert.DeserializeObject<List<FutureMessage>>(existingData) ?? new List<FutureMessage>();
             }
 
-            // Добавляем новое сообщение в список
             messages.Add(futureMessage);
 
-            // Сохраняем обновленный список сообщений в файл
             string jsonData = JsonConvert.SerializeObject(messages, Formatting.Indented);
             File.WriteAllText(filePath, jsonData);
 
             MessageBox.Show("Письмо и дата доставки успешно сохранены.");
         }
 
-        // Метод для отправки письма через SMTP
         private void SendEmail(string email, string message)
         {
-            // Логика отправки письма через SMTP
             string smtpServer = "smtp.gmail.com";
             int smtpPort = 587;
-            string smtpUser = "your-email@gmail.com"; // Ваша почта Gmail
-            string smtpPass = "your-app-password"; // Пароль приложения
+            string smtpUser = "sadeval2011@gmail.com"; 
+            string smtpPass = "password"; 
 
             try
             {
@@ -112,7 +102,6 @@ namespace FutureMeApp
         }
     }
 
-    // Класс для представления письма
     public class FutureMessage
     {
         public string Email { get; set; }
